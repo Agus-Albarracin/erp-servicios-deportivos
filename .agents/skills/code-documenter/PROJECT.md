@@ -21,5 +21,7 @@ corresponda, `references/interactive-api-docs.md`.
 - Validar el documento generado y la interfaz servida, incluidas las cabeceras
   de seguridad existentes. Las anotaciones no sustituyen validación ni guards.
 
-Estado de esta incorporación: solo se vendoriza la skill. Swagger aún no está
-implementado en la aplicación.
+Swagger está implementado en `src/documentation/` del backend y se publica en
+`/api/docs`, con JSON en `/api/openapi.json`. Consultar `docs/swagger.md` del
+backend para exportación, pruebas y configuración. Mantener sus 32 operaciones
+documentadas al modificar contratos.

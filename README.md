@@ -46,7 +46,8 @@ tener una base MySQL no garantiza por sí solo que se pueda ejecutar NestJS.
 ## Seguridad
 
 - Helmet y CSP antes de registrar las rutas; sin `X-Powered-By`.
-- CORS con lista exacta; por defecto solo `http://localhost:3000`, sin credenciales.
+- CORS permite el mismo origen de la API y una lista exacta de orígenes externos;
+  por defecto `http://localhost:3000`, sin credenciales.
 - DTOs con `ValidationPipe`: rechazan campos extra, tipos incorrectos y nulos.
 - Texto plano: rechaza HTML y caracteres de control. El cliente debe renderizar
   textos como texto, sin `innerHTML`/`dangerouslySetInnerHTML`.
@@ -155,3 +156,12 @@ MariaDB temporal, usar un contenedor local con base `turnero_test`, host `127.0.
 puerto `43306`; configurar DB_*, aplicar migraciones y establecer `E2E_MYSQL=true`.
 Este modo limpia únicamente esa base local de pruebas y agrega comprobaciones
 de persistencia tras reinicio y rollback. No apuntarlo a datos reales.
+
+## Swagger / OpenAPI
+
+Documentación interactiva: `http://localhost:4000/api/docs`.
+Especificación: `http://localhost:4000/api/openapi.json`.
+
+Incluye las 32 operaciones de la API, DTOs, respuestas, errores y autorización
+con `X-API-Key`. Consultar [la guía de Swagger](docs/swagger.md) para probar
+endpoints, configurar su disponibilidad y generar el JSON sin conectar a la base.

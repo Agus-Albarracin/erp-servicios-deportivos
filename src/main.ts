@@ -3,6 +3,7 @@ import { AppModule } from './app.module.js';
 import { configureApp } from './configure-app.js';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { existsSync } from 'node:fs';
+import { configureSwagger } from './documentation/swagger.js';
 
 async function bootstrap() {
   if (existsSync('.env')) process.loadEnvFile('.env');
@@ -13,6 +14,7 @@ async function bootstrap() {
     bodyParser: false,
   });
   configureApp(app);
+  configureSwagger(app);
   await app.listen(port);
 }
 await bootstrap();
