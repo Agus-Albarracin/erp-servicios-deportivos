@@ -1,3 +1,6 @@
+import { ManagementController } from './management/management.controller.js';
+import { ManagementService } from './management/management.service.js';
+import { SchedulingModule } from './scheduling/scheduling.module.js';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
@@ -9,10 +12,11 @@ import { StorageModule } from './storage/storage.module.js';
 import { TransactionInterceptor } from './storage/transaction.interceptor.js';
 
 @Module({
-  imports: [StorageModule, CatalogModule, SlotsModule, BookingsModule],
-  controllers: [AppController],
+  imports: [StorageModule, CatalogModule, SlotsModule, BookingsModule, SchedulingModule],
+  controllers: [AppController, ManagementController],
   providers: [
     AppService,
+    ManagementService,
     { provide: APP_INTERCEPTOR, useClass: TransactionInterceptor },
   ],
 })

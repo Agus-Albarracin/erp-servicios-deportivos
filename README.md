@@ -1,6 +1,6 @@
 # API del turnero de polideportivos
 
-Backend NestJS según `.agents/AGENTS.md`. CRUD de deportes, zonas, sedes, deportes
+Backend NestJS según [`../AGENTS.md`](../AGENTS.md) y [`AGENTS.md`](AGENTS.md). Contexto frontend/backend en [`../docs/integracion.md`](../docs/integracion.md). CRUD de deportes, zonas, sedes, deportes
 por sede, turnos y borradores. Genera una vista previa y un enlace de WhatsApp;
 no envía mensajes, no bloquea el turno y no confirma reservas.
 
@@ -43,10 +43,32 @@ Producción: `npm run build` y `npm run start:prod`. Configurar los orígenes HT
 reales en `CORS_ORIGINS`. El plan de Hostinger debe admitir aplicaciones Node.js;
 tener una base MySQL no garantiza por sí solo que se pueda ejecutar NestJS.
 
+## MySQL local en esta PC y TablePlus
+
+La instancia del proyecto usa `127.0.0.1:3307`, base
+`erp-servicios-deportivos` y usuario `turnero_local`. La contraseña está en
+`DB_PASSWORD` del `.env`. En TablePlus, crear una conexión MySQL con esos valores.
+Las tablas están creadas; los catálogos comienzan vacíos.
+
+Los datos persistentes están en `.local-mysql/data`, excluidos de Git. Esa carpeta
+no debe borrarse: contiene la base local. La contraseña administrativa de esta
+instancia está en `.local-mysql/root-password.txt`; no es necesaria para TablePlus.
+La instancia usa el ejecutable de MySQL 8.0 ya instalado en esta PC y no se registra
+como servicio. Después de reiniciar Windows, iniciar primero MySQL y luego la API:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-mysql.ps1
+npm run start
+```
+
+Ejecutar el primer comando solo si la instancia no está corriendo. Este script
+arranca la base previamente inicializada; no prepara otra PC desde cero.
+
 ## Seguridad
 
 - Helmet y CSP antes de registrar las rutas; sin `X-Powered-By`.
-- CORS con lista exacta; por defecto solo `http://localhost:3000`, sin credenciales.
+- CORS permite el mismo origen de la API y una lista exacta de orígenes externos;
+  por defecto `http://localhost:3000`, sin credenciales.
 - DTOs con `ValidationPipe`: rechazan campos extra, tipos incorrectos y nulos.
 - Texto plano: rechaza HTML y caracteres de control. El cliente debe renderizar
   textos como texto, sin `innerHTML`/`dangerouslySetInnerHTML`.
@@ -155,3 +177,78 @@ MariaDB temporal, usar un contenedor local con base `turnero_test`, host `127.0.
 puerto `43306`; configurar DB_*, aplicar migraciones y establecer `E2E_MYSQL=true`.
 Este modo limpia únicamente esa base local de pruebas y agrega comprobaciones
 de persistencia tras reinicio y rollback. No apuntarlo a datos reales.
+
+## Swagger / OpenAPI
+
+Documentación interactiva: `http://localhost:4000/api/docs`.
+Especificación: `http://localhost:4000/api/openapi.json`.
+
+Incluye las 32 operaciones de la API, DTOs, respuestas, errores y autorización
+con `X-API-Key`. Consultar [la guía de Swagger](docs/swagger.md) para probar
+endpoints, configurar su disponibilidad y generar el JSON sin conectar a la base.
+
+
+## Backoffice administrativo
+
+`backoffice/` implementa el panel Next.js en http://localhost:3001. El navegador usa
+una sesiÃ³n HttpOnly; Ãºnicamente el servidor Next.js envÃ­a X-API-Key a NestJS.
+El frontend pÃºblico conserva sus endpoints y filtros actuales.
+
+Nuevos listados: GET /api/management/sports, /zones, /venues, /venue-sports,
+/slots y /booking-drafts (todos bajo /api/management). Requieren MANAGEMENT_API_KEY
+y devuelven arrays completos con Cache-Control: no-store, incluidos registros
+inactivos y turnos pasados/bloqueados. Errores: 401 credenciales, 403 origen,
+429 lÃ­mite de solicitudes, 503 persistencia. No tienen paginaciÃ³n de servidor;
+el panel pagina y filtra en memoria para el volumen del MVP.
+
+Crear, modificar y eliminar usa los endpoints existentes y sus DTOs/validaciones.
+No se omiten restricciones de dependencias ni compatibilidad. Los borradores
+siguen sin representar reservas confirmadas. No se agregan tablas ni migraciones.
+Consultar backoffice/README.md para acceso, configuraciÃ³n, pruebas y lÃ­mites.
+
+## Calendario y disponibilidad recurrente (2026-09-08)
+
+Aplicar 002_scheduling.sql después de un backup; conserva turnos y borradores.
+React DayPicker 10.0.1 (MIT) muestra el mes en client y backoffice. La lista
+existente se conserva. GET /api/scheduling/settings devuelve calendarEnabled
+(false por defecto); PATCH protegido por X-API-Key guarda el switch global.
+La preferencia se consulta al entrar a disponibilidad; los botones de vista
+cambian solo la presentación local. No se requiere otro despliegue.
+
+GET /api/scheduling/schedules y POST en esa ruta requieren X-API-Key. POST
+crea/reemplaza una regla por venueId/sportId: isActive, weekdays (máscara 1–127,
+domingo=1, lunes=2 ... sábado=64), opensAt/closesAt HH:mm, durationMinutes
+(15–720), horizonDays (1–365). Una franja diaria sin cruce de medianoche.
+No se impone una duración real: la ingresa el administrador. No se generan
+intervalos incompletos al cierre. Desactivar oculta los turnos de esa regla;
+no elimina registros. Conservar los turnos manuales: ante coincidencias exactas
+prevalece su estado. No hay modelo de capacidad/canchas ni prevención nueva de
+solapamientos entre turnos manuales y automáticos.
+
+GET/POST /api/scheduling/blocked-days requieren clave; POST recibe venueId,
+date YYYY-MM-DD y reason de texto plano. El bloqueo afecta a todos los deportes
+de la sede durante ese día de Buenos Aires. DELETE /api/scheduling/blocked-days/:id
+reabre según la regla y conserva los bloqueos individuales. No se borran borradores,
+se envían mensajes ni se cancelan reservas confirmadas automáticamente.
+
+GET público /api/scheduling/month?venueId=UUID&sportId=UUID&month=YYYY-MM
+devuelve [{date, availableCount, blocked}] sin motivos internos de cierre. Es
+solo lectura. GET /api/slots conserva su contrato y materializa únicamente el día
+consultado en una transacción serializada: UUID v4 deterministas por regla/horario,
+sin duplicados. Las vistas usan el mismo cálculo. El listado administrativo muestra
+los registros ya materializados, con cierres y reglas obsoletas como UNAVAILABLE.
+Revalidar slotId al guardar borrador y antes de WhatsApp, incluidos cierres y cambios
+de regla posteriores a la selección. Las consultas no consumen disponibilidad.
+
+Nuevas respuestas llevan no-store. Errores: 400 validación/compatibilidad, 401
+gestión, 404 referencia, 409 dependencia, 413 tamaño, 429 límite, 503 persistencia.
+No hay credenciales de gestión en client. El backoffice usa sesión y proxy
+/api/scheduling/* con lista permitida y validación de origen en escrituras.
+Para volúmenes grandes se necesitan consultas paginadas y límites por horizonte;
+el MVP mantiene el repositorio y la serialización existentes.
+
+### Confirmación administrativa
+
+Ejecutar `npm run db:migrate` aplica `003_reservations.sql` sin modificar solicitudes existentes. `POST /api/booking-drafts/:id/confirm` requiere X-API-Key y una solicitud completa, con horario futuro disponible. Es atómico e idempotente. Devuelve status CONFIRMED y confirmedAt; el horario pasa a RESERVED. Las solicitudes confirmadas son inmutables.
+
+`GET /api/scheduling/day?venueId=…&sportId=…&date=YYYY-MM-DD` muestra AVAILABLE y RESERVED sin datos de solicitantes. `/slots` sigue devolviendo solo disponibles. El mes incluye reservedCount. Cerrar un día o cambiar una regla no cancela reservas confirmadas. Cada turno manual representa capacidad independiente; las reglas automáticas no regeneran intervalos ocupados. WhatsApp sigue siendo una consulta pendiente.

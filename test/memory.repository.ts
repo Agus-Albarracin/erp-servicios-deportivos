@@ -3,8 +3,16 @@ import type { Tables } from '../src/storage/models.js';
 // Only tests use memory; the application always binds MariaDB.
 export class MemoryRepository extends TurneroRepository {
   private readonly rows = new Map<string, unknown>();
+  private tail: Promise<void> = Promise.resolve();
   async transaction<T>(work: () => Promise<T>) {
-    return work();
+    const previous = this.tail;
+    let release!: () => void;
+    this.tail = new Promise<void>(resolve => { release = resolve; });
+    await previous;
+    const snapshot = structuredClone(this.rows);
+    try { return await work(); }
+    catch (error) { this.rows.clear(); for (const [key, value] of snapshot) this.rows.set(key, value); throw error; }
+    finally { release(); }
   }
   async list<K extends keyof Tables>(
     table: K,

@@ -14,6 +14,11 @@ import { databaseConfig } from './database.config.js';
 
 // SQL identifiers are exclusively defined here, never taken from HTTP input.
 const columns: { [K in keyof Tables]: readonly (keyof Tables[K])[] } = {
+  reservations: ['id', 'slotId', 'confirmedAt'],
+  calendarSettings: ['id', 'calendarEnabled'],
+  availabilitySchedules: ['id', 'venueId', 'sportId', 'isActive', 'weekdays', 'opensAt', 'closesAt', 'durationMinutes', 'horizonDays'],
+  blockedDays: ['id', 'venueId', 'date', 'reason'],
+  generatedSlots: ['id', 'scheduleId'],
   sports: ['id', 'name', 'icon', 'isActive'],
   zones: ['id', 'name'],
   venues: [
@@ -115,7 +120,7 @@ export class MysqlRepository
     const fields = columns[table];
     const values = fields.map((field) => {
       const value = item[field];
-      return (field === 'startsAt' || field === 'endsAt') &&
+      return (field === 'startsAt' || field === 'endsAt' || field === 'confirmedAt') &&
         typeof value === 'string'
         ? new Date(value)
         : (value ?? null);
@@ -166,7 +171,7 @@ export class MysqlRepository
               .filter(([, value]) => value !== null)
               .map(([key, value]) => [
                 key,
-                key === 'isActive'
+                (key === 'isActive' || key === 'calendarEnabled')
                   ? Boolean(value)
                   : value instanceof Date
                     ? value.toISOString()
@@ -190,6 +195,7 @@ export class MysqlRepository
       throw new ConflictException(
         'El registro está duplicado o tiene referencias incompatibles',
       );
+    if (code === 'ER_NO_SUCH_TABLE') throw new ServiceUnavailableException('La base necesita actualizarse. Ejecutá npm run db:migrate en server.');
     this.logger.error(`Database operation failed (${code ?? 'unknown'})`);
     throw new ServiceUnavailableException('No se pudo acceder a los datos');
   }
