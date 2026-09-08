@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "name": "atomic-commits",
+  "version": "1.2.0",
+  "status": "native",
+  "maintainer": "skillstack",
+  "createdAt": "2026-09-04",
+  "updatedAt": "2026-09-04",
+  "abstract": "Workflow for planning, authorizing, staging, creating, and verifying small local Git commits.",
+  "sources": []
+}
