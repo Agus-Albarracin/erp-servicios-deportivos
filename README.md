@@ -183,7 +183,7 @@ de persistencia tras reinicio y rollback. No apuntarlo a datos reales.
 Documentación interactiva: `http://localhost:4000/api/docs`.
 Especificación: `http://localhost:4000/api/openapi.json`.
 
-Incluye las 32 operaciones de la API, DTOs, respuestas, errores y autorización
+Incluye las 48 operaciones de la API, DTOs, respuestas, errores y autorización
 con `X-API-Key`. Consultar [la guía de Swagger](docs/swagger.md) para probar
 endpoints, configurar su disponibilidad y generar el JSON sin conectar a la base.
 
