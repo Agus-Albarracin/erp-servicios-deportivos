@@ -39,8 +39,8 @@ export class CatalogService {
   }
   async remove(table: CatalogTable, id: string) {
     await this.get(table, id);
-    const [venues, relations, slots, drafts] = await Promise.all(
-      ['venues', 'venueSports', 'slots', 'drafts'].map((t) =>
+    const [venues, relations, slots, drafts, schedules, blocks] = await Promise.all(
+      ['venues', 'venueSports', 'slots', 'drafts', 'availabilitySchedules', 'blockedDays'].map((t) =>
         this.repository.list(t as keyof Tables),
       ),
     );
@@ -52,7 +52,7 @@ export class CatalogService {
     }[table];
     if (
       key &&
-      [...venues, ...relations, ...slots, ...drafts].some(
+      [...venues, ...relations, ...slots, ...drafts, ...schedules, ...blocks].some(
         (item) => (item as unknown as Record<string, unknown>)[key] === id,
       )
     )
@@ -61,6 +61,8 @@ export class CatalogService {
       );
     if (table === 'venueSports') {
       const relation = await this.get('venueSports', id);
+      if ((await this.repository.list('availabilitySchedules', { venueId: relation.venueId, sportId: relation.sportId })).length)
+        throw new ConflictException('La relación tiene un horario recurrente; desactivala en lugar de eliminarla.');
       if (
         (await this.repository.list('slots')).some(
           (s) =>
@@ -133,10 +135,9 @@ export class CatalogService {
         previous &&
         (previous.venueId !== relation.venueId ||
           previous.sportId !== relation.sportId) &&
-        (await this.repository.list('slots')).some(
-          (s) =>
-            s.venueId === previous.venueId && s.sportId === previous.sportId,
-        )
+        ((await this.repository.list('slots')).some(
+          (s) => s.venueId === previous.venueId && s.sportId === previous.sportId,
+        ) || (await this.repository.list('availabilitySchedules', { venueId: previous.venueId, sportId: previous.sportId })).length > 0)
       )
         throw new ConflictException(
           'No se puede cambiar una relación con turnos asociados',

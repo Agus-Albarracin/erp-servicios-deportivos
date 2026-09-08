@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { SchedulingService } from '../scheduling/scheduling.service.js';
 import { randomUUID } from 'node:crypto';
 import { CatalogService } from '../catalog/catalog.service.js';
 import { TurneroRepository } from '../storage/turnero.repository.js';
@@ -31,21 +32,13 @@ export class SlotsService {
   constructor(
     @Inject(TurneroRepository) private readonly repository: TurneroRepository,
     @Inject(CatalogService) private readonly catalog: CatalogService,
+    @Inject(SchedulingService) private readonly scheduling: SchedulingService,
   ) {}
   get(id: string) {
     return this.catalog.get('slots', id);
   }
   async available(query: SlotQueryDto) {
-    await this.catalog.assertCompatible(query.venueId, query.sportId);
-    const start = new Date(`${query.date}T00:00:00-03:00`);
-    const until = new Date(start.getTime() + 86_400_000);
-    const from = new Date(Math.max(start.getTime(), Date.now() + 1));
-    return this.repository.availableSlots(
-      query.venueId,
-      query.sportId,
-      from,
-      until,
-    );
+    return this.scheduling.available(query.venueId, query.sportId, query.date);
   }
   async selectable(id: string, venueId: string, sportId: string, date: string) {
     const slot = await this.get(id);
@@ -55,6 +48,7 @@ export class SlotsService {
       slot.sportId !== sportId ||
       localDate(slot.startsAt) !== date ||
       slot.status !== SlotStatus.AVAILABLE ||
+      !(await this.scheduling.allowed(slot)) ||
       Date.parse(slot.startsAt) <= Date.now()
     )
       throw new BadRequestException(
@@ -68,11 +62,16 @@ export class SlotsService {
     return this.repository.save('slots', slot);
   }
   async update(id: string, dto: UpdateSlotDto) {
+    if ((await this.repository.list('reservations', { slotId: id })).length) throw new ConflictException('El turno está reservado y no se puede modificar.');
+    if (await this.repository.get('generatedSlots', id)) {
+      if (Object.keys(dto).some(key => key !== 'status')) throw new BadRequestException('Para cambiar horarios automáticos, editá la regla recurrente. Este turno solo admite cambiar su estado.');
+    }
     const slot = { ...(await this.get(id)), ...dto, id };
     await this.validate(slot);
     return this.repository.save('slots', slot);
   }
   async remove(id: string) {
+    if (await this.repository.get('generatedSlots', id)) throw new ConflictException('El turno es automático. Bloqueá su estado o el día completo para que no vuelva a generarse.');
     await this.get(id);
     if ((await this.repository.list('drafts')).some((d) => d.slotId === id))
       throw new ConflictException(

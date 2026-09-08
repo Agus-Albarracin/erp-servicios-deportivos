@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   Inject,
   Param,
@@ -24,12 +25,13 @@ export class SlotsController {
     tag: 'Turnos',
     summary: 'Consultar disponibilidad por fecha',
     description:
-      'Requiere venueId, sportId y date. Solo devuelve turnos AVAILABLE y futuros del día local en Buenos Aires. Un día sin turnos devuelve []. No genera una grilla de horarios bloqueados.',
+      'Requiere venueId, sportId y date. Solo devuelve turnos AVAILABLE y futuros del día local en Buenos Aires. Un día sin turnos devuelve []. Incluye los turnos del horario recurrente, materializados para el día consultado de forma idempotente. Excluye cierres por sede y horarios automáticos obsoletos.',
     type: SlotResponseDto,
     array: true,
     errors: [400, 404],
   })
   @Get()
+  @Header('Cache-Control', 'no-store')
   list(@Query() query: SlotQueryDto) {
     return this.slots.available(query);
   }

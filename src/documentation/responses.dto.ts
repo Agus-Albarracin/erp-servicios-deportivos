@@ -15,6 +15,7 @@ import type {
   Slot,
   BookingDraft,
 } from '../storage/models.js';
+import { SlotStatus } from '../storage/models.js';
 import { phone, text, uuid } from './properties.js';
 
 export class SportResponseDto extends CreateSportDto implements Sport {
@@ -42,12 +43,17 @@ export class VenueSportResponseDto
   @ApiProperty(uuid('Identificador público de la relación')) id: string;
 }
 export class SlotResponseDto extends CreateSlotDto implements Slot {
+  @ApiProperty({ enum: SlotStatus, description: 'Estado efectivo. RESERVED solo se obtiene por confirmación administrativa.' }) declare status: SlotStatus;
   @ApiProperty(uuid('Identificador público del turno')) id: string;
 }
 export class BookingDraftResponseDto
   extends CreateBookingDto
   implements BookingDraft
 {
+  @ApiProperty({ enum: ['PENDING_CONFIRMATION', 'CONFIRMED'] }) status: string;
+  @ApiPropertyOptional({ type: String, format: 'date-time' }) startsAt?: string;
+  @ApiPropertyOptional({ type: String, format: 'date-time' }) endsAt?: string;
+  @ApiPropertyOptional({ type: String, format: 'date-time' }) confirmedAt?: string;
   @ApiProperty(
     uuid(
       'UUID secreto de acceso al borrador. Quien lo conoce puede leerlo, modificarlo y eliminarlo. No publicarlo ni registrarlo.',

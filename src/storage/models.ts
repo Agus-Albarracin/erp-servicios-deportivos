@@ -8,6 +8,7 @@ export enum ZoneName {
 export enum SlotStatus {
   AVAILABLE = 'AVAILABLE',
   UNAVAILABLE = 'UNAVAILABLE',
+  RESERVED = 'RESERVED',
 }
 export interface Sport {
   id: string;
@@ -55,7 +56,16 @@ export interface BookingDraft {
   slotId?: string;
   date?: string;
 }
+export interface AvailabilitySchedule {
+  id: string; venueId: string; sportId: string; isActive: boolean; weekdays: number;
+  opensAt: string; closesAt: string; durationMinutes: number; horizonDays: number;
+}
 export interface Tables {
+  reservations: { id: string; slotId: string; confirmedAt: string };
+  calendarSettings: { id: string; calendarEnabled: boolean };
+  availabilitySchedules: AvailabilitySchedule;
+  blockedDays: { id: string; venueId: string; date: string; reason: string };
+  generatedSlots: { id: string; scheduleId: string };
   sports: Sport;
   zones: Zone;
   venues: Venue;

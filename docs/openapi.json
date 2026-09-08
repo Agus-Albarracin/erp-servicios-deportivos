@@ -54,6 +54,577 @@
         ]
       }
     },
+    "/api/management/sports": {
+      "get": {
+        "operationId": "ManagementController_sports",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SportResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar todos los deportes, incluidos inactivos",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/zones": {
+      "get": {
+        "operationId": "ManagementController_zones",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ZoneResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar todas las zonas",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/venues": {
+      "get": {
+        "operationId": "ManagementController_venues",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VenueResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar todas las sedes, incluidas inactivas",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/venue-sports": {
+      "get": {
+        "operationId": "ManagementController_relations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VenueSportResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar todas las relaciones sede/deporte",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/slots": {
+      "get": {
+        "operationId": "ManagementController_slots",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SlotResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar turnos disponibles, bloqueados y pasados",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/booking-drafts": {
+      "get": {
+        "description": "Incluye datos personales y UUID secretos. No publicar ni registrar en logs. No representan reservas confirmadas.",
+        "operationId": "ManagementController_drafts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingDraftResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar borradores de solicitudes",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
     "/api/sports": {
       "get": {
         "description": "Devuelve únicamente deportes activos.",
@@ -2559,7 +3130,7 @@
     },
     "/api/slots": {
       "get": {
-        "description": "Requiere venueId, sportId y date. Solo devuelve turnos AVAILABLE y futuros del día local en Buenos Aires. Un día sin turnos devuelve []. No genera una grilla de horarios bloqueados.",
+        "description": "Requiere venueId, sportId y date. Solo devuelve turnos AVAILABLE y futuros del día local en Buenos Aires. Un día sin turnos devuelve []. Incluye los turnos del horario recurrente, materializados para el día consultado de forma idempotente. Excluye cierres por sede y horarios automáticos obsoletos.",
         "operationId": "SlotsController_list",
         "parameters": [
           {
@@ -3232,6 +3803,1103 @@
         ]
       }
     },
+    "/api/scheduling/settings": {
+      "get": {
+        "operationId": "SchedulingController_settings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalendarSettingsDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "summary": "Consultar vista inicial del sistema",
+        "tags": [
+          "Calendario"
+        ]
+      },
+      "patch": {
+        "operationId": "SchedulingController_updateSettings",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalendarSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalendarSettingsDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Configurar vista inicial de client y backoffice",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
+    "/api/scheduling/schedules": {
+      "get": {
+        "operationId": "SchedulingController_schedules",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduleResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar horarios recurrentes",
+        "tags": [
+          "Calendario"
+        ]
+      },
+      "post": {
+        "description": "Crea o reemplaza la regla de la pareja. No elimina turnos ni solicitudes anteriores. Desactivar la regla oculta sus turnos automáticos.",
+        "operationId": "SchedulingController_saveSchedule",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicado o registro con dependencias que impiden la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 409,
+                  "message": "Duplicado o registro con dependencias que impiden la operación."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Guardar horario recurrente por sede y deporte",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
+    "/api/scheduling/blocked-days": {
+      "get": {
+        "operationId": "SchedulingController_blockedDays",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlockedDayResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Listar cierres de sedes",
+        "tags": [
+          "Calendario"
+        ]
+      },
+      "post": {
+        "description": "Afecta todos sus deportes, turnos manuales y automáticos. Impide seleccionar y generar WhatsApp; no envía cancelaciones ni elimina borradores.",
+        "operationId": "SchedulingController_blockDay",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockedDayDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlockedDayResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicado o registro con dependencias que impiden la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 409,
+                  "message": "Duplicado o registro con dependencias que impiden la operación."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Bloquear un día completo de una sede",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
+    "/api/scheduling/blocked-days/{id}": {
+      "delete": {
+        "operationId": "SchedulingController_unblockDay",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "UUID público del registro.",
+            "schema": {
+              "format": "uuid",
+              "example": "00000000-0000-4000-8000-000000000001",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Eliminado. Sin cuerpo de respuesta."
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Reabrir un día bloqueado",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
+    "/api/scheduling/day": {
+      "get": {
+        "description": "Solo datos de horarios: no expone contactos ni identificadores de solicitudes. RESERVED no se puede seleccionar. /slots conserva su contrato de disponibles.",
+        "operationId": "SchedulingController_day",
+        "parameters": [
+          {
+            "name": "venueId",
+            "required": true,
+            "in": "query",
+            "description": "Sede elegida; filtro obligatorio",
+            "schema": {
+              "format": "uuid",
+              "example": "00000000-0000-4000-8000-000000000001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportId",
+            "required": true,
+            "in": "query",
+            "description": "Deporte elegido; filtro obligatorio",
+            "schema": {
+              "format": "uuid",
+              "example": "00000000-0000-4000-8000-000000000001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "description": "Día local en America/Argentina/Buenos_Aires.",
+            "schema": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "example": "2099-01-01",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SlotResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "summary": "Consultar horarios disponibles y reservados de un día",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
+    "/api/scheduling/month": {
+      "get": {
+        "description": "Solo lectura, en Buenos Aires. Los motivos internos de cierre no se publican.",
+        "operationId": "SchedulingController_month",
+        "parameters": [
+          {
+            "name": "venueId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "2026-09",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CalendarDayDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "summary": "Consultar días y cantidad de turnos de un mes",
+        "tags": [
+          "Calendario"
+        ]
+      }
+    },
     "/api/booking-drafts": {
       "get": {
         "description": "Contiene datos personales e identificadores secretos. No utilizar desde el frontend público.",
@@ -3844,6 +5512,153 @@
         ]
       }
     },
+    "/api/booking-drafts/{id}/confirm": {
+      "post": {
+        "description": "Solo administración. Requiere solicitud completa y turno futuro disponible. Confirmación atómica e idempotente; otra solicitud sobre el mismo turno recibe 409. Una solicitud confirmada no puede editarse ni eliminarse.",
+        "operationId": "BookingsController_confirm",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "UUID secreto del borrador. Usar únicamente uno propio; no publicarlo.",
+            "schema": {
+              "format": "uuid",
+              "example": "00000000-0000-4000-8000-000000000001",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDraftResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicado o registro con dependencias que impiden la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 409,
+                  "message": "Duplicado o registro con dependencias que impiden la operación."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Confirmar y reservar un turno",
+        "tags": [
+          "Borradores"
+        ]
+      }
+    },
     "/api/booking-drafts/{id}/whatsapp": {
       "post": {
         "description": "Sin body requerido. Revalida contacto completo, zona, sede, fecha y turno futuro disponible. Devuelve PENDING_CONFIRMATION, summary, message y url. No envía mensajes ni bloquea disponibilidad. El navegador abre la URL solo por acción del usuario; la sede confirma la reserva.",
@@ -4079,65 +5894,6 @@
           "id"
         ]
       },
-      "CreateSportDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Nombre del deporte. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 120,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "Fútbol"
-          },
-          "icon": {
-            "type": "string",
-            "description": "Ícono del deporte. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "⚽"
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "Indica si el deporte está habilitado.",
-            "example": true
-          }
-        },
-        "required": [
-          "name",
-          "icon",
-          "isActive"
-        ],
-        "additionalProperties": false
-      },
-      "UpdateSportDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Nombre del deporte. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 120,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "Fútbol"
-          },
-          "icon": {
-            "type": "string",
-            "description": "Ícono del deporte. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "⚽"
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "Indica si el deporte está habilitado.",
-            "example": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ZoneName": {
         "type": "string",
         "enum": [
@@ -4172,39 +5928,6 @@
           "name",
           "id"
         ]
-      },
-      "CreateZoneDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Zona geográfica.",
-            "example": "CABA",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ZoneName"
-              }
-            ]
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "UpdateZoneDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Zona geográfica.",
-            "example": "CABA",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ZoneName"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
       },
       "VenueResponseDto": {
         "type": "object",
@@ -4282,6 +6005,275 @@
           "isActive",
           "id"
         ]
+      },
+      "VenueSportResponseDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sede que ofrece el deporte",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Deporte ofrecido",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Relación sede/deporte habilitada.",
+            "example": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identificador público de la relación",
+            "example": "00000000-0000-4000-8000-000000000001"
+          }
+        },
+        "required": [
+          "venueId",
+          "sportId",
+          "isActive",
+          "id"
+        ]
+      },
+      "SlotResponseDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sede habilitada que ofrece el deporte",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Deporte del turno",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Inicio con zona horaria explícita. Se normaliza a UTC.",
+            "pattern": "T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "example": "2099-01-01T18:00:00-03:00"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fin posterior al inicio, con zona horaria explícita. Se normaliza a UTC.",
+            "pattern": "T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "example": "2099-01-01T19:00:00-03:00"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE",
+              "RESERVED"
+            ],
+            "description": "Estado efectivo. RESERVED solo se obtiene por confirmación administrativa.",
+            "example": "AVAILABLE"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identificador público del turno",
+            "example": "00000000-0000-4000-8000-000000000001"
+          }
+        },
+        "required": [
+          "venueId",
+          "sportId",
+          "startsAt",
+          "endsAt",
+          "status",
+          "id"
+        ]
+      },
+      "BookingDraftResponseDto": {
+        "type": "object",
+        "properties": {
+          "sportId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Deporte activo elegido; único campo obligatorio al crear",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "renterFirstName": {
+            "type": "string",
+            "description": "Nombre del solicitante. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "Ana"
+          },
+          "renterLastName": {
+            "type": "string",
+            "description": "Apellido del solicitante. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "Ejemplo"
+          },
+          "renterPhone": {
+            "type": "string",
+            "description": "Teléfono internacional con + y 8–15 dígitos, sin espacios.",
+            "pattern": "^\\+[1-9]\\d{7,14}$",
+            "example": "+5491100000000"
+          },
+          "zoneId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Zona seleccionada; requerida antes de elegir sede",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "venueId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sede habilitada compatible con zona y deporte",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "slotId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Turno futuro y disponible de la sede, deporte y fecha seleccionados",
+            "example": "00000000-0000-4000-8000-000000000001"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Día local en America/Argentina/Buenos_Aires.",
+            "example": "2099-01-01"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING_CONFIRMATION",
+              "CONFIRMED"
+            ]
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "confirmedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID secreto de acceso al borrador. Quien lo conoce puede leerlo, modificarlo y eliminarlo. No publicarlo ni registrarlo.",
+            "example": "00000000-0000-4000-8000-000000000001"
+          }
+        },
+        "required": [
+          "sportId",
+          "status",
+          "id"
+        ]
+      },
+      "CreateSportDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del deporte. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "Fútbol"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Ícono del deporte. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "⚽"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Indica si el deporte está habilitado.",
+            "example": true
+          }
+        },
+        "required": [
+          "name",
+          "icon",
+          "isActive"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateSportDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del deporte. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "Fútbol"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Ícono del deporte. Texto plano; se eliminan espacios extremos.",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
+            "example": "⚽"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Indica si el deporte está habilitado.",
+            "example": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateZoneDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Zona geográfica.",
+            "example": "CABA",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ZoneName"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateZoneDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Zona geográfica.",
+            "example": "CABA",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ZoneName"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
       },
       "VenueDetailResponseDto": {
         "type": "object",
@@ -4499,40 +6491,6 @@
         },
         "additionalProperties": false
       },
-      "VenueSportResponseDto": {
-        "type": "object",
-        "properties": {
-          "venueId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Sede que ofrece el deporte",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "sportId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Deporte ofrecido",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "Relación sede/deporte habilitada.",
-            "example": true
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Identificador público de la relación",
-            "example": "00000000-0000-4000-8000-000000000001"
-          }
-        },
-        "required": [
-          "venueId",
-          "sportId",
-          "isActive",
-          "id"
-        ]
-      },
       "CreateVenueSportDto": {
         "type": "object",
         "properties": {
@@ -4584,68 +6542,6 @@
         },
         "additionalProperties": false
       },
-      "SlotStatus": {
-        "type": "string",
-        "enum": [
-          "AVAILABLE",
-          "UNAVAILABLE"
-        ],
-        "description": "Disponibilidad del turno."
-      },
-      "SlotResponseDto": {
-        "type": "object",
-        "properties": {
-          "venueId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Sede habilitada que ofrece el deporte",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "sportId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Deporte del turno",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "startsAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Inicio con zona horaria explícita. Se normaliza a UTC.",
-            "pattern": "T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
-            "example": "2099-01-01T18:00:00-03:00"
-          },
-          "endsAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Fin posterior al inicio, con zona horaria explícita. Se normaliza a UTC.",
-            "pattern": "T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
-            "example": "2099-01-01T19:00:00-03:00"
-          },
-          "status": {
-            "description": "Disponibilidad del turno.",
-            "example": "AVAILABLE",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SlotStatus"
-              }
-            ]
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Identificador público del turno",
-            "example": "00000000-0000-4000-8000-000000000001"
-          }
-        },
-        "required": [
-          "venueId",
-          "sportId",
-          "startsAt",
-          "endsAt",
-          "status",
-          "id"
-        ]
-      },
       "CreateSlotDto": {
         "type": "object",
         "properties": {
@@ -4676,13 +6572,13 @@
             "example": "2099-01-01T19:00:00-03:00"
           },
           "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE"
+            ],
             "description": "Disponibilidad del turno.",
-            "example": "AVAILABLE",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SlotStatus"
-              }
-            ]
+            "example": "AVAILABLE"
           }
         },
         "required": [
@@ -4724,83 +6620,206 @@
             "example": "2099-01-01T19:00:00-03:00"
           },
           "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE"
+            ],
             "description": "Disponibilidad del turno.",
-            "example": "AVAILABLE",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SlotStatus"
-              }
-            ]
+            "example": "AVAILABLE"
           }
         },
         "additionalProperties": false
       },
-      "BookingDraftResponseDto": {
+      "CalendarSettingsDto": {
         "type": "object",
         "properties": {
-          "sportId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Deporte activo elegido; único campo obligatorio al crear",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "renterFirstName": {
-            "type": "string",
-            "description": "Nombre del solicitante. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "Ana"
-          },
-          "renterLastName": {
-            "type": "string",
-            "description": "Apellido del solicitante. Texto plano; se eliminan espacios extremos.",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*$",
-            "example": "Ejemplo"
-          },
-          "renterPhone": {
-            "type": "string",
-            "description": "Teléfono internacional con + y 8–15 dígitos, sin espacios.",
-            "pattern": "^\\+[1-9]\\d{7,14}$",
-            "example": "+5491100000000"
-          },
-          "zoneId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Zona seleccionada; requerida antes de elegir sede",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "venueId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Sede habilitada compatible con zona y deporte",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "slotId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Turno futuro y disponible de la sede, deporte y fecha seleccionados",
-            "example": "00000000-0000-4000-8000-000000000001"
-          },
-          "date": {
-            "type": "string",
-            "format": "date",
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-            "description": "Día local en America/Argentina/Buenos_Aires.",
-            "example": "2099-01-01"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "UUID secreto de acceso al borrador. Quien lo conoce puede leerlo, modificarlo y eliminarlo. No publicarlo ni registrarlo.",
-            "example": "00000000-0000-4000-8000-000000000001"
+          "calendarEnabled": {
+            "type": "boolean",
+            "description": "Vista inicial calendario en client y backoffice."
           }
         },
         "required": [
+          "calendarEnabled"
+        ]
+      },
+      "ScheduleResponseDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "weekdays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 127,
+            "description": "Máscara semanal: domingo=1, lunes=2, ... sábado=64."
+          },
+          "opensAt": {
+            "type": "string",
+            "example": "09:00"
+          },
+          "closesAt": {
+            "type": "string",
+            "example": "22:00"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "minimum": 15,
+            "maximum": 720
+          },
+          "horizonDays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 365
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "venueId",
           "sportId",
+          "isActive",
+          "weekdays",
+          "opensAt",
+          "closesAt",
+          "durationMinutes",
+          "horizonDays",
           "id"
+        ]
+      },
+      "ScheduleDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "weekdays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 127,
+            "description": "Máscara semanal: domingo=1, lunes=2, ... sábado=64."
+          },
+          "opensAt": {
+            "type": "string",
+            "example": "09:00"
+          },
+          "closesAt": {
+            "type": "string",
+            "example": "22:00"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "minimum": 15,
+            "maximum": 720
+          },
+          "horizonDays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 365
+          }
+        },
+        "required": [
+          "venueId",
+          "sportId",
+          "isActive",
+          "weekdays",
+          "opensAt",
+          "closesAt",
+          "durationMinutes",
+          "horizonDays"
+        ]
+      },
+      "BlockedDayResponseDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "venueId",
+          "date",
+          "reason",
+          "id"
+        ]
+      },
+      "BlockedDayDto": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "venueId",
+          "date",
+          "reason"
+        ]
+      },
+      "CalendarDayDto": {
+        "type": "object",
+        "properties": {
+          "reservedCount": {
+            "type": "number",
+            "description": "Cantidad de turnos confirmados del día"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "availableCount": {
+            "type": "number"
+          },
+          "blocked": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reservedCount",
+          "date",
+          "availableCount",
+          "blocked"
         ]
       },
       "CreateBookingDto": {

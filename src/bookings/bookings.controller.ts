@@ -106,6 +106,12 @@ export class BookingsController {
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.bookings.remove(id);
   }
+  @Post(':id/confirm')
+  @UseGuards(ManagementGuard)
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  @ApiEndpoint({ tag: 'Borradores', summary: 'Confirmar y reservar un turno', description: 'Solo administración. Requiere solicitud completa y turno futuro disponible. Confirmación atómica e idempotente; otra solicitud sobre el mismo turno recibe 409. Una solicitud confirmada no puede editarse ni eliminarse.', type: BookingDraftResponseDto, management: true, id: true, noStore: true, errors: [400, 409] })
+  confirm(@Param('id', ParseUUIDPipe) id: string) { return this.bookings.confirm(id); }
   @Post(':id/whatsapp')
   @ApiEndpoint({
     tag: 'Borradores',

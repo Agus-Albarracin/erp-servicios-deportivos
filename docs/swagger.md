@@ -38,7 +38,9 @@ no usan esa clave. El UUID del borrador es un secreto de acceso; no compartirlo.
 | Deportes por sede | 5 |
 | Turnos | 5 |
 | Borradores y WhatsApp | 6 |
-| **Total** | **32 / 32** |
+| Administración | 6 / 6 |
+| Calendario y disponibilidad recurrente | 8 |
+| **Total** | **46 / 46** |
 
 Se documentan los 6 DTOs de creación, sus 6 variantes PATCH, los 2 DTOs de filtros,
 los modelos de respuesta, enums, errores y seguridad. Las pruebas comparan las
@@ -80,7 +82,7 @@ npm run test:e2e
 al ciclo de inicialización de la base de datos.
 
 `docs:check` usa el código compilado y un repositorio en memoria. Verifica la
-especificación, las 32 operaciones, los guards, los esquemas, la UI servida, CORS,
+especificación, las 46 operaciones, los guards, los esquemas, la UI servida, CORS,
 la desactivación de documentación y ejemplos ejecutables del flujo completo.
 La suite habitual de HTTP también cubre las validaciones originales, incluido
 el rechazo de valores nulos al cambiar a `PartialType` de `@nestjs/swagger`.
@@ -92,7 +94,7 @@ contrato de integración en la raíz del workspace.
 ## Evidencia de esta implementación
 
 - Documento OpenAPI validado y comparado con su copia versionada.
-- Cobertura de rutas y guards: 32/32.
+- Cobertura de rutas y guards: 46/46.
 - Siete pruebas específicas de Swagger aprobadas.
 - Verificación en Chromium headless: UI renderizada, **Try it out** sobre
   `GET /api/sports` devuelve 200; un POST del mismo origen sin clave llega al guard

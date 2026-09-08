@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { date, instant, uuid } from '../documentation/properties.js';
-import { IsDateString, IsEnum, IsUUID, Matches } from 'class-validator';
+import { IsDateString, IsIn, IsUUID, Matches } from 'class-validator';
 import { SlotStatus } from '../storage/models.js';
 export class CreateSlotDto {
   @ApiProperty(uuid('Sede habilitada que ofrece el deporte'))
@@ -28,12 +28,11 @@ export class CreateSlotDto {
   @Matches(/T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/)
   endsAt: string;
   @ApiProperty({
-    enum: SlotStatus,
-    enumName: 'SlotStatus',
+    enum: [SlotStatus.AVAILABLE, SlotStatus.UNAVAILABLE],
     description: 'Disponibilidad del turno.',
     example: SlotStatus.AVAILABLE,
   })
-  @IsEnum(SlotStatus)
+  @IsIn([SlotStatus.AVAILABLE, SlotStatus.UNAVAILABLE])
   status: SlotStatus;
 }
 export class UpdateSlotDto extends PartialType(CreateSlotDto, {

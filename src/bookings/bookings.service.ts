@@ -1,4 +1,5 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
+import { bookingView } from './booking-view.js';
 import { randomUUID } from 'node:crypto';
 import { CatalogService } from '../catalog/catalog.service.js';
 import { SlotsService } from '../slots/slots.service.js';
@@ -13,19 +14,40 @@ export class BookingsService {
     @Inject(CatalogService) private readonly catalog: CatalogService,
     @Inject(SlotsService) private readonly slots: SlotsService,
   ) {}
-  list() {
-    return this.repository.list('drafts');
+  async list() {
+    const [drafts, slots, reservations] = await Promise.all([this.repository.list('drafts'), this.repository.list('slots'), this.repository.list('reservations')]);
+    return drafts.map(draft => bookingView(draft, slots, reservations));
   }
-  get(id: string) {
-    return this.catalog.get('drafts', id);
+  async get(id: string) {
+    const draft = await this.catalog.get('drafts', id);
+    const slot = draft.slotId ? await this.repository.get('slots', draft.slotId) : undefined;
+    const reservation = await this.repository.get('reservations', id);
+    return bookingView(draft, slot ? [slot] : [], reservation ? [reservation] : []);
+  }
+  async confirm(id: string) {
+    // TransactionInterceptor serializes validation and insertion across API instances.
+    const draft = await this.catalog.get('drafts', id);
+    if (await this.repository.get('reservations', id)) return this.get(id);
+    if (!draft.renterFirstName || !draft.renterLastName || !draft.renterPhone || !draft.zoneId || !draft.venueId || !draft.date || !draft.slotId)
+      throw new BadRequestException('Completá contacto, sede, fecha y horario antes de confirmar.');
+    if ((await this.repository.list('reservations', { slotId: draft.slotId })).length)
+      throw new ConflictException('El horario ya fue reservado por otra solicitud.');
+    await this.validate(draft);
+    await this.repository.save('reservations', { id, slotId: draft.slotId, confirmedAt: new Date().toISOString() });
+    return this.get(id);
+  }
+  private async assertPending(id: string) {
+    if (await this.repository.get('reservations', id)) throw new ConflictException('La solicitud está confirmada y no se puede modificar ni eliminar.');
   }
   async create(dto: CreateBookingDto) {
     const draft = { ...dto, id: randomUUID() };
     await this.validate(draft);
-    return this.repository.save('drafts', draft);
+    await this.repository.save('drafts', draft);
+    return this.get(draft.id);
   }
   async update(id: string, dto: UpdateBookingDto) {
-    const previous = await this.get(id);
+    await this.assertPending(id);
+    const previous = await this.catalog.get('drafts', id);
     const draft = { ...previous, ...dto, id };
     const sportChanged = draft.sportId !== previous.sportId;
     const zoneChanged = draft.zoneId !== previous.zoneId;
@@ -54,9 +76,11 @@ export class BookingsService {
     )
       delete draft.slotId;
     await this.validate(draft);
-    return this.repository.save('drafts', draft);
+    await this.repository.save('drafts', draft);
+    return this.get(id);
   }
   async remove(id: string) {
+    await this.assertPending(id);
     await this.get(id);
     await this.repository.remove('drafts', id);
   }
