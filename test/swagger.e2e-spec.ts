@@ -25,6 +25,7 @@ import { CatalogController } from '../dist/catalog/catalog.controller.js';
 import { SlotsController } from '../dist/slots/slots.controller.js';
 import { BookingsController } from '../dist/bookings/bookings.controller.js';
 import { SchedulingController } from '../dist/scheduling/scheduling.controller.js';
+import { AdminSessionsController } from '../dist/management/admin-sessions.controller.js';
 import { ManagementController } from '../dist/management/management.controller.js';
 import { ManagementGuard } from '../dist/security/management.guard.js';
 import { TurneroRepository } from '../dist/storage/turnero.repository.js';
@@ -74,7 +75,7 @@ describe('Swagger and OpenAPI contract', () => {
     expect(JSON.stringify(document)).not.toContain(key);
   });
 
-  it('documents all 48 routes and matches actual management guards', () => {
+  it('documents all 51 routes and matches actual management guards', () => {
     let count = 0;
     for (const controller of [
       AppController,
@@ -82,6 +83,7 @@ describe('Swagger and OpenAPI contract', () => {
       SlotsController,
       BookingsController,
       ManagementController,
+      AdminSessionsController,
       SchedulingController,
     ]) {
       for (const name of Object.getOwnPropertyNames(controller.prototype)) {
@@ -124,7 +126,7 @@ describe('Swagger and OpenAPI contract', () => {
         ).length,
       0,
     );
-    expect(count).toBe(48);
+    expect(count).toBe(51);
     expect(actual).toBe(count);
   });
 

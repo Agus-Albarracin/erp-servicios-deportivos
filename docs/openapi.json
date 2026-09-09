@@ -625,6 +625,405 @@
         ]
       }
     },
+    "/api/management/sessions": {
+      "post": {
+        "description": "Uso privado del backoffice después de validar credenciales. Caduca a las ocho horas. Solo guarda el hash del identificador.",
+        "operationId": "AdminSessionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdminSessionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSessionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Persistir sesión administrativa validada por backoffice",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/sessions/lookup": {
+      "post": {
+        "operationId": "AdminSessionsController_lookup",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionLookupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operación completada. Respuesta directa, sin envoltorio data.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSessionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro o relación referenciada inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Registro o relación referenciada inexistente."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Consultar una sesión administrativa vigente",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
+    "/api/management/sessions/revoke": {
+      "post": {
+        "description": "Idempotente. Impide reutilizar una cookie revocada desde cualquier instancia.",
+        "operationId": "AdminSessionsController_revoke",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionLookupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Eliminado. Sin cuerpo de respuesta.",
+            "headers": {
+              "Cache-Control": {
+                "description": "El borrador no debe cachearse.",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Datos inválidos, campos extra o nulos, selección incompatible o turno no disponible."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "X-API-Key ausente o incorrecta, o clave de gestión sin configurar."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origen no permitido por CORS.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "Origen no permitido por CORS."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El JSON supera 16 KiB.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 413,
+                  "message": "El JSON supera 16 KiB."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Se superaron 100 solicitudes por minuto por IP.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "message": "Se superaron 100 solicitudes por minuto por IP."
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No se pudo acceder a la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                },
+                "example": {
+                  "statusCode": 503,
+                  "message": "No se pudo acceder a la base de datos."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ManagementKey": []
+          }
+        ],
+        "summary": "Revocar una sesión administrativa",
+        "tags": [
+          "Administración"
+        ]
+      }
+    },
     "/api/sports": {
       "get": {
         "description": "Devuelve únicamente deportes activos.",
@@ -6181,6 +6580,54 @@
           "sportId",
           "status",
           "id"
+        ]
+      },
+      "CreateAdminSessionDto": {
+        "type": "object",
+        "properties": {
+          "tokenHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA-256 del identificador aleatorio. Nunca enviar la cookie completa."
+          },
+          "username": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.@-]{1,80}$"
+          }
+        },
+        "required": [
+          "tokenHash",
+          "username"
+        ],
+        "additionalProperties": false
+      },
+      "AdminSessionResponseDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Expiración absoluta, milisegundos Unix; duración de ocho horas."
+          }
+        },
+        "required": [
+          "username",
+          "expiresAt"
+        ]
+      },
+      "SessionLookupDto": {
+        "type": "object",
+        "properties": {
+          "tokenHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA-256 del identificador aleatorio. Nunca enviar la cookie completa."
+          }
+        },
+        "required": [
+          "tokenHash"
         ]
       },
       "CreateSportDto": {

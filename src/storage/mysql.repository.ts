@@ -8,7 +8,7 @@ import type { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { createPool } from 'mysql2/promise';
 import type { Pool, PoolConnection, RowDataPacket } from 'mysql2/promise';
-import { TurneroRepository } from './turnero.repository.js';
+import { TurneroRepository, type AdminSession } from './turnero.repository.js';
 import type { Tables } from './models.js';
 import { databaseConfig } from './database.config.js';
 
@@ -150,6 +150,22 @@ export class MysqlRepository
     } catch (error) {
       this.fail(error);
     }
+  }
+  async createAdminSession(session: AdminSession) {
+    try {
+      await this.executor.execute('DELETE FROM admin_sessions WHERE expiresAt <= ?', [Date.now()]);
+      await this.executor.execute('INSERT INTO admin_sessions (tokenHash, username, expiresAt) VALUES (?, ?, ?)', [session.tokenHash, session.username, session.expiresAt]);
+    } catch (error) { this.fail(error); }
+  }
+  async getAdminSession(tokenHash: string): Promise<AdminSession | undefined> {
+    try {
+      const [rows] = await this.executor.execute<RowDataPacket[]>('SELECT tokenHash, username, expiresAt FROM admin_sessions WHERE tokenHash = ? AND expiresAt > ?', [tokenHash, Date.now()]);
+      return rows[0] ? { tokenHash: String(rows[0].tokenHash), username: String(rows[0].username), expiresAt: Number(rows[0].expiresAt) } : undefined;
+    } catch (error) { return this.fail(error); }
+  }
+  async revokeAdminSession(tokenHash: string) {
+    try { await this.executor.execute('DELETE FROM admin_sessions WHERE tokenHash = ?', [tokenHash]); }
+    catch (error) { this.fail(error); }
   }
   private get executor() {
     return this.context.getStore() ?? this.pool;
