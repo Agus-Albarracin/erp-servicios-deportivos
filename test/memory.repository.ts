@@ -1,8 +1,17 @@
-import { TurneroRepository } from '../dist/storage/turnero.repository.js';
+import { TurneroRepository, type AdminSession } from '../dist/storage/turnero.repository.js';
 import type { Tables } from '../src/storage/models.js';
 // Only tests use memory; the application always binds MariaDB.
 export class MemoryRepository extends TurneroRepository {
   private readonly rows = new Map<string, unknown>();
+  async createAdminSession(session: AdminSession) {
+    if (this.rows.has(`session:${session.tokenHash}`)) throw new Error('Duplicate session');
+    this.rows.set(`session:${session.tokenHash}`, structuredClone(session));
+  }
+  async getAdminSession(tokenHash: string) {
+    const session = this.rows.get(`session:${tokenHash}`) as AdminSession | undefined;
+    return session && session.expiresAt > Date.now() ? structuredClone(session) : undefined;
+  }
+  async revokeAdminSession(tokenHash: string) { this.rows.delete(`session:${tokenHash}`); }
   private tail: Promise<void> = Promise.resolve();
   async transaction<T>(work: () => Promise<T>) {
     const previous = this.tail;

@@ -1,6 +1,11 @@
 import type { Tables } from './models.js';
 
+export interface AdminSession { tokenHash: string; username: string; expiresAt: number; }
+
 export abstract class TurneroRepository {
+  abstract createAdminSession(session: AdminSession): Promise<void>;
+  abstract getAdminSession(tokenHash: string): Promise<AdminSession | undefined>;
+  abstract revokeAdminSession(tokenHash: string): Promise<void>;
   abstract transaction<T>(work: () => Promise<T>): Promise<T>;
   abstract list<K extends keyof Tables>(
     table: K,

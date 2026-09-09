@@ -1,3 +1,4 @@
+import { AdminSessionsController } from './management/admin-sessions.controller.js';
 import { ManagementController } from './management/management.controller.js';
 import { ManagementService } from './management/management.service.js';
 import { SchedulingModule } from './scheduling/scheduling.module.js';
@@ -13,7 +14,7 @@ import { TransactionInterceptor } from './storage/transaction.interceptor.js';
 
 @Module({
   imports: [StorageModule, CatalogModule, SlotsModule, BookingsModule, SchedulingModule],
-  controllers: [AppController, ManagementController],
+  controllers: [AppController, ManagementController, AdminSessionsController],
   providers: [
     AppService,
     ManagementService,
