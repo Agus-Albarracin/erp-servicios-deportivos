@@ -23,5 +23,5 @@ corresponda, `references/interactive-api-docs.md`.
 
 Swagger está implementado en `src/documentation/` del backend y se publica en
 `/api/docs`, con JSON en `/api/openapi.json`. Consultar `docs/swagger.md` del
-backend para exportación, pruebas y configuración. Mantener sus 32 operaciones
+backend para exportación, pruebas y configuración. Mantener sus 48 operaciones
 documentadas al modificar contratos.
