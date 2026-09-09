@@ -19,6 +19,10 @@ for the complete branch, commit, PR and push-confirmation rules. Prepare authori
 local commits first, then report exact titles and bases before requesting any
 missing push confirmation. Preserve published history when reorganizing work.
 
+Manual push delivery is required: provide exact commands in dependency order,
+separate pending from synchronized branches, and identify PR bases. The user runs
+the pushes unless they explicitly delegate execution. See references/project-items.md.
+
 ## CRITICAL: Project items before implementation
 
 This is an explicit user workflow preference. Before implementing changes,
