@@ -7,6 +7,18 @@ metadata:
 
 # Atomic Commits
 
+## CRITICAL: One specific task per branch
+
+This user's persistent workflow requires one concrete task per branch and only
+commits that serve that task. Before editing, declare the Project item, repository,
+specific branch name, base and dependency reason. New independent work requires
+another branch from main; use a feature branch as a base only for a real dependency.
+Generic catch-all names are prohibited. Share a name across repositories only for
+the same concrete task. Read [Project item planning](references/project-items.md)
+for the complete branch, commit, PR and push-confirmation rules. Prepare authorized
+local commits first, then report exact titles and bases before requesting any
+missing push confirmation. Preserve published history when reorganizing work.
+
 ## CRITICAL: Project items before implementation
 
 This is an explicit user workflow preference. Before implementing changes,
