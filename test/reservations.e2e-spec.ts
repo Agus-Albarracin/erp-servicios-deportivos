@@ -83,4 +83,52 @@ describe('Administrative reservations', () => {
     expect(day[0].status).toBe('RESERVED');
     await api().post('/api/slots').set('X-API-Key', key).send({ venueId: venue.id, sportId: sport.id, startsAt: slots[0].startsAt, endsAt: slots[0].endsAt, status: 'RESERVED' }).expect(400);
   });
+  it('records external total payment once, requires confirmation and preserves reserved availability', async () => {
+    const { query, sport, venue, zone } = await fixture();
+    const slots = (await api().get('/api/slots').query(query)).body;
+    const draft = await create('booking-drafts', { sportId: sport.id, venueId: venue.id, zoneId: zone.id, date, slotId: slots[0].id, renterFirstName: 'Ana', renterLastName: 'Pérez', renterPhone: '+5491100000001' });
+    const path = '/api/booking-drafts/' + draft.id;
+    expect(draft.paymentStatus).toBe('PENDING');
+    await api().post(path + '/total-payment').expect(401);
+    await api().post('/api/booking-drafts/not-a-uuid/total-payment').set('X-API-Key', key).expect(400);
+    await api().post('/api/booking-drafts/00000000-0000-4000-8000-000000000099/total-payment').set('X-API-Key', key).expect(404);
+    await api().post(path + '/total-payment').set('X-API-Key', key).expect(409);
+    await api().patch(path).send({ paymentStatus: 'TOTAL_PAID', totalPaidAt: new Date().toISOString() }).expect(400);
+    expect(await app.get(TurneroRepository).list('reservationPayments')).toHaveLength(0);
+    const confirmed = (await api().post(path + '/confirm').set('X-API-Key', key).expect(200)).body;
+    expect(confirmed.paymentStatus).toBe('RESERVATION_PAID');
+    expect(confirmed).not.toHaveProperty('totalPaidAt');
+    const responses = await Promise.all([1, 2].map(() => api().post(path + '/total-payment').set('X-API-Key', key).expect('Cache-Control', 'no-store').expect(200)));
+    const paid = responses[0].body;
+    expect(paid).toMatchObject({ status: 'CONFIRMED', paymentStatus: 'TOTAL_PAID', confirmedAt: confirmed.confirmedAt });
+    expect(Number.isNaN(Date.parse(paid.totalPaidAt))).toBe(false);
+    expect(responses[1].body.totalPaidAt).toBe(paid.totalPaidAt);
+    expect(await app.get(TurneroRepository).list('reservationPayments')).toHaveLength(1);
+    const again = (await api().post(path + '/confirm').set('X-API-Key', key).expect(200)).body;
+    expect(again).toMatchObject({ paymentStatus: 'TOTAL_PAID', totalPaidAt: paid.totalPaidAt });
+    expect((await api().get(path).expect(200)).body).toEqual(paid);
+    for (const listing of ['/api/management/booking-drafts', '/api/booking-drafts']) {
+      expect((await api().get(listing).set('X-API-Key', key).expect(200)).body.find(item => item.id === draft.id)).toEqual(paid);
+    }
+    await api().patch(path).send({ renterFirstName: 'Otro' }).expect(409);
+    await api().delete(path).expect(409);
+    const day = (await api().get('/api/scheduling/day').query(query).expect(200)).body;
+    expect(day.map(slot => slot.status)).toEqual(['RESERVED', 'AVAILABLE']);
+    expect(JSON.stringify(day)).not.toContain('totalPaidAt');
+    expect(JSON.stringify(day)).not.toContain('paymentStatus');
+  });
+  it('allows recording the total after the slot ended and the venue was deactivated', async () => {
+    const { query, sport, venue, zone } = await fixture();
+    const slots = (await api().get('/api/slots').query(query)).body;
+    const draft = await create('booking-drafts', { sportId: sport.id, venueId: venue.id, zoneId: zone.id, date, slotId: slots[0].id, renterFirstName: 'Ana', renterLastName: 'Pérez', renterPhone: '+5491100000001' });
+    const path = '/api/booking-drafts/' + draft.id;
+    const confirmed = (await api().post(path + '/confirm').set('X-API-Key', key).expect(200)).body;
+    // Simulate historical data without relying on the wall clock or relaxing production rules.
+    const repository = app.get(TurneroRepository);
+    await repository.save('slots', { ...slots[0], startsAt: '2000-01-01T12:00:00.000Z', endsAt: '2000-01-01T13:00:00.000Z' });
+    await repository.save('venues', { ...venue, isActive: false });
+    const paid = (await api().post(path + '/total-payment').set('X-API-Key', key).expect(200)).body;
+    expect(paid).toMatchObject({ status: 'CONFIRMED', paymentStatus: 'TOTAL_PAID', confirmedAt: confirmed.confirmedAt });
+    expect(await repository.get('slots', slots[0].id)).toMatchObject({ endsAt: '2000-01-01T13:00:00.000Z' });
+  });
 });

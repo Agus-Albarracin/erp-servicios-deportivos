@@ -183,7 +183,7 @@ de persistencia tras reinicio y rollback. No apuntarlo a datos reales.
 Documentación interactiva: `http://localhost:4000/api/docs`.
 Especificación: `http://localhost:4000/api/openapi.json`.
 
-Incluye las 51 operaciones de la API, DTOs, respuestas, errores y autorización
+Incluye las 52 operaciones de la API, DTOs, respuestas, errores y autorización
 con `X-API-Key`. Consultar [la guía de Swagger](docs/swagger.md) para probar
 endpoints, configurar su disponibilidad y generar el JSON sin conectar a la base.
 
@@ -249,7 +249,7 @@ el MVP mantiene el repositorio y la serialización existentes.
 
 ### Confirmación administrativa
 
-Ejecutar `npm run db:migrate` aplica `003_reservations.sql` sin modificar solicitudes existentes. `POST /api/booking-drafts/:id/confirm` requiere X-API-Key y una solicitud completa, con horario futuro disponible. Es atómico e idempotente. Devuelve status CONFIRMED y confirmedAt; el horario pasa a RESERVED. Las solicitudes confirmadas son inmutables.
+Ejecutar `npm run db:migrate` aplica `003_reservations.sql` sin modificar solicitudes existentes. `POST /api/booking-drafts/:id/confirm` requiere X-API-Key y una solicitud completa, con horario futuro disponible. Es atómico e idempotente. Devuelve status CONFIRMED y confirmedAt; el horario pasa a RESERVED. Los datos de las solicitudes confirmadas son inmutables; el registro de pago total tiene una acción administrativa específica.
 
 `GET /api/scheduling/day?venueId=…&sportId=…&date=YYYY-MM-DD` muestra AVAILABLE y RESERVED sin datos de solicitantes. `/slots` sigue devolviendo solo disponibles. El mes incluye reservedCount. Cerrar un día o cambiar una regla no cancela reservas confirmadas. Cada turno manual representa capacidad independiente; las reglas automáticas no regeneran intervalos ocupados. WhatsApp sigue siendo una consulta pendiente.
 
@@ -263,3 +263,14 @@ absoluta de ocho horas. El backoffice valida la contraseña y firma la cookie;
 la API persiste, consulta y revoca la sesión entre instancias. No hay listado
 público de sesiones ni se envían contraseñas al server. La creación limpia las
 sesiones vencidas. Desplegar server y aplicar la migración antes que backoffice.
+
+
+## Registro manual de pagos externos
+
+En Solicitudes, CONFIRMED se presenta como «Pagó reserva». POST
+`/api/booking-drafts/:id/total-payment` registra «Pagó total» con clave de
+gestión. Ambos conservan la ocupación del turno; el total puede registrarse
+después de su fecha. Aplicar `005_reservation_payments.sql` antes de desplegar
+la API y después publicar el backoffice. La API devuelve `paymentStatus` y,
+para pago total, `totalPaidAt`. No procesa cobros ni verifica transferencias.
+Ver [contrato, fundamentos y despliegue](docs/pagos-externos.md).

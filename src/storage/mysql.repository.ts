@@ -14,6 +14,7 @@ import { databaseConfig } from './database.config.js';
 
 // SQL identifiers are exclusively defined here, never taken from HTTP input.
 const columns: { [K in keyof Tables]: readonly (keyof Tables[K])[] } = {
+  reservationPayments: ['id', 'totalPaidAt'],
   reservations: ['id', 'slotId', 'confirmedAt'],
   calendarSettings: ['id', 'calendarEnabled'],
   availabilitySchedules: ['id', 'venueId', 'sportId', 'isActive', 'weekdays', 'opensAt', 'closesAt', 'durationMinutes', 'horizonDays'],
@@ -120,7 +121,7 @@ export class MysqlRepository
     const fields = columns[table];
     const values = fields.map((field) => {
       const value = item[field];
-      return (field === 'startsAt' || field === 'endsAt' || field === 'confirmedAt') &&
+      return (field === 'startsAt' || field === 'endsAt' || field === 'confirmedAt' || field === 'totalPaidAt') &&
         typeof value === 'string'
         ? new Date(value)
         : (value ?? null);

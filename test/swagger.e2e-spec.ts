@@ -75,7 +75,7 @@ describe('Swagger and OpenAPI contract', () => {
     expect(JSON.stringify(document)).not.toContain(key);
   });
 
-  it('documents all 51 routes and matches actual management guards', () => {
+  it('documents all 52 routes and matches actual management guards', () => {
     let count = 0;
     for (const controller of [
       AppController,
@@ -126,7 +126,7 @@ describe('Swagger and OpenAPI contract', () => {
         ).length,
       0,
     );
-    expect(count).toBe(51);
+    expect(count).toBe(52);
     expect(actual).toBe(count);
   });
 
@@ -154,6 +154,8 @@ describe('Swagger and OpenAPI contract', () => {
     expect(schema('BookingDraftResponseDto').required).toEqual(
       expect.arrayContaining(['sportId', 'id']),
     );
+    expect(schema('BookingDraftResponseDto').properties?.paymentStatus).toMatchObject({ enum: ['PENDING', 'RESERVATION_PAID', 'TOTAL_PAID'] });
+    expect(document.paths['/api/booking-drafts/{id}/total-payment']!.post!.responses).toHaveProperty('409');
     expect(schema('BookingSummaryDto').required).toHaveLength(6);
     expect(schema('WhatsAppResponseDto').properties?.status).toMatchObject({
       enum: ['PENDING_CONFIRMATION'],

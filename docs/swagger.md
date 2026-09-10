@@ -25,7 +25,7 @@ de ejemplo son ficticios: reemplazarlos por los devueltos al crear registros.
 La secuencia de carga es deportes, zonas, sedes, relaciones sede/deporte y turnos.
 El listado de borradores y todas las operaciones de `venue-sports` requieren clave.
 Las lecturas públicas de catálogos y las operaciones individuales de borradores
-no usan esa clave, excepto `POST /booking-drafts/:id/confirm`, que es administrativo. El UUID del borrador es un secreto de acceso; no compartirlo.
+no usan esa clave, excepto `POST /booking-drafts/:id/confirm` y `POST /booking-drafts/:id/total-payment`, que son administrativos. El UUID del borrador es un secreto de acceso; no compartirlo.
 
 ## Cobertura
 
@@ -37,10 +37,10 @@ no usan esa clave, excepto `POST /booking-drafts/:id/confirm`, que es administra
 | Sedes | 5 |
 | Deportes por sede | 5 |
 | Turnos | 5 |
-| Borradores, WhatsApp y confirmación administrativa | 7 |
+| Borradores, WhatsApp, confirmación y pago total | 8 |
 | Administración | 9 / 9 |
 | Calendario y disponibilidad recurrente | 9 |
-| **Total** | **51 / 51** |
+| **Total** | **52 / 52** |
 
 Se documentan los 6 DTOs de creación, sus 6 variantes PATCH, los DTOs de filtros,
 los modelos de respuesta, enums, errores y seguridad. Las pruebas comparan las
@@ -54,7 +54,10 @@ de borrador pueden haberse invalidado: reemplazar el estado local con la respues
 El endpoint de WhatsApp devuelve `PENDING_CONFIRMATION`; no envía el mensaje,
 no ocupa el turno y no confirma una reserva. La confirmación protegida devuelve
 `CONFIRMED` y `confirmedAt`; el horario se muestra como `RESERVED`. El endpoint
-público `/scheduling/day` no expone datos de solicitantes.
+público `/scheduling/day` no expone datos de solicitantes ni estados de pago.
+Los borradores incluyen `paymentStatus`; la acción protegida `/total-payment`
+registra TOTAL_PAID y `totalPaidAt` sin cambiar CONFIRMED ni la disponibilidad.
+Ver [pagos externos](pagos-externos.md).
 
 ## Configuración y seguridad
 
@@ -84,7 +87,7 @@ npm run test:e2e
 al ciclo de inicialización de la base de datos.
 
 `docs:check` usa el código compilado y un repositorio en memoria. Verifica la
-especificación, las 51 operaciones, los guards, los esquemas, la UI servida, CORS,
+especificación, las 52 operaciones, los guards, los esquemas, la UI servida, CORS,
 la desactivación de documentación y ejemplos ejecutables del flujo completo.
 La suite habitual de HTTP también cubre las validaciones originales, incluido
 el rechazo de valores nulos al cambiar a `PartialType` de `@nestjs/swagger`.
@@ -96,7 +99,7 @@ contrato de integración en la raíz del workspace.
 ## Evidencia de esta implementación
 
 - Documento OpenAPI validado y comparado con su copia versionada.
-- Cobertura de rutas y guards: 51/51.
+- Cobertura de rutas y guards: 52/52.
 - Siete pruebas específicas de Swagger aprobadas.
 - Verificación en Chromium headless: UI renderizada, **Try it out** sobre
   `GET /api/sports` devuelve 200; un POST del mismo origen sin clave llega al guard

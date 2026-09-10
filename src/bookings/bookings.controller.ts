@@ -110,8 +110,14 @@ export class BookingsController {
   @UseGuards(ManagementGuard)
   @HttpCode(200)
   @Header('Cache-Control', 'no-store')
-  @ApiEndpoint({ tag: 'Borradores', summary: 'Confirmar y reservar un turno', description: 'Solo administración. Requiere solicitud completa y turno futuro disponible. Confirmación atómica e idempotente; otra solicitud sobre el mismo turno recibe 409. Una solicitud confirmada no puede editarse ni eliminarse.', type: BookingDraftResponseDto, management: true, id: true, noStore: true, errors: [400, 409] })
+  @ApiEndpoint({ tag: 'Borradores', summary: 'Registrar pago de reserva y reservar un turno', description: 'Registro manual de un pago externo. Requiere solicitud completa y turno futuro disponible. Conserva status CONFIRMED y devuelve paymentStatus RESERVATION_PAID, o TOTAL_PAID si ya se registró el total. Atómico e idempotente; otra solicitud sobre el mismo turno recibe 409. No procesa cobros ni permite editar o eliminar una reserva.', type: BookingDraftResponseDto, management: true, id: true, noStore: true, errors: [400, 409] })
   confirm(@Param('id', ParseUUIDPipe) id: string) { return this.bookings.confirm(id); }
+  @Post(':id/total-payment')
+  @UseGuards(ManagementGuard)
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  @ApiEndpoint({ tag: 'Borradores', summary: 'Registrar pago total externo', description: 'Solo administración, sin body requerido. Requiere una reserva confirmada; admite turnos pasados, cerrados o de sedes desactivadas. Devuelve paymentStatus TOTAL_PAID y totalPaidAt conservando status CONFIRMED y confirmedAt. Atómico e idempotente: repetir no cambia la fecha registrada ni la disponibilidad. No procesa pagos. 409 si todavía no se registró el pago de reserva.', type: BookingDraftResponseDto, management: true, id: true, noStore: true, errors: [409] })
+  recordTotalPayment(@Param('id', ParseUUIDPipe) id: string) { return this.bookings.recordTotalPayment(id); }
   @Post(':id/whatsapp')
   @ApiEndpoint({
     tag: 'Borradores',

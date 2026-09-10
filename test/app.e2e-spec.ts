@@ -40,7 +40,7 @@ describe('Turnero HTTP API', () => {
       const connection = await createConnection(databaseConfig());
       try {
         for (const table of [
-          'reservations', 'generatedSlots',
+          'reservationPayments', 'reservations', 'generatedSlots',
           'blockedDays',
           'availabilitySchedules',
           'calendarSettings',
