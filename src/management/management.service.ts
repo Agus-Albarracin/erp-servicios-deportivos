@@ -2,19 +2,19 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TurneroRepository } from '../storage/turnero.repository.js';
 import { SchedulingService } from '../scheduling/scheduling.service.js';
 import { bookingView } from '../bookings/booking-view.js';
-import type { BookingDraft, Slot, Tables } from '../storage/models.js';
+import type { BookingDraft, Slot } from '../storage/models.js';
 
 /** Complete lists for authenticated administration, including inactive records. */
 @Injectable()
 export class ManagementService {
   constructor(@Inject(TurneroRepository) private readonly repository: TurneroRepository, @Inject(SchedulingService) private readonly scheduling: SchedulingService) {}
 
-  async list<K extends keyof Tables>(table: K): Promise<Tables[K][]> {
+  async list(table: 'sports' | 'zones' | 'venues' | 'venueSports' | 'slots' | 'drafts') {
     const rows = await this.repository.list(table);
     if (table === 'drafts') {
-      const [slots, reservations] = await Promise.all([this.repository.list('slots'), this.repository.list('reservations')]);
-      return (rows as BookingDraft[]).map(draft => bookingView(draft, slots, reservations)) as Tables[K][];
+      const [slots, reservations, payments] = await Promise.all([this.repository.list('slots'), this.repository.list('reservations'), this.repository.list('reservationPayments')]);
+      return (rows as BookingDraft[]).map(draft => bookingView(draft, slots, reservations, payments));
     }
-    return table === 'slots' ? await this.scheduling.effectiveSlots(rows as Slot[]) as Tables[K][] : rows;
+    return table === 'slots' ? await this.scheduling.effectiveSlots(rows as Slot[]) : rows;
   }
 }

@@ -15,14 +15,15 @@ export class BookingsService {
     @Inject(SlotsService) private readonly slots: SlotsService,
   ) {}
   async list() {
-    const [drafts, slots, reservations] = await Promise.all([this.repository.list('drafts'), this.repository.list('slots'), this.repository.list('reservations')]);
-    return drafts.map(draft => bookingView(draft, slots, reservations));
+    const [drafts, slots, reservations, payments] = await Promise.all([this.repository.list('drafts'), this.repository.list('slots'), this.repository.list('reservations'), this.repository.list('reservationPayments')]);
+    return drafts.map(draft => bookingView(draft, slots, reservations, payments));
   }
   async get(id: string) {
     const draft = await this.catalog.get('drafts', id);
     const slot = draft.slotId ? await this.repository.get('slots', draft.slotId) : undefined;
     const reservation = await this.repository.get('reservations', id);
-    return bookingView(draft, slot ? [slot] : [], reservation ? [reservation] : []);
+    const payment = reservation ? await this.repository.get('reservationPayments', id) : undefined;
+    return bookingView(draft, slot ? [slot] : [], reservation ? [reservation] : [], payment ? [payment] : []);
   }
   async confirm(id: string) {
     // TransactionInterceptor serializes validation and insertion across API instances.
@@ -38,6 +39,16 @@ export class BookingsService {
   }
   private async assertPending(id: string) {
     if (await this.repository.get('reservations', id)) throw new ConflictException('La solicitud está confirmada y no se puede modificar ni eliminar.');
+  }
+  async recordTotalPayment(id: string) {
+    // The transaction interceptor serializes this acknowledgement with confirmation.
+    // Do not revalidate future availability: the payment can arrive after the game.
+    await this.catalog.get('drafts', id);
+    if (!(await this.repository.get('reservations', id)))
+      throw new ConflictException('Primero registrá el pago de la reserva.');
+    if (!(await this.repository.get('reservationPayments', id)))
+      await this.repository.save('reservationPayments', { id, totalPaidAt: new Date().toISOString() });
+    return this.get(id);
   }
   async create(dto: CreateBookingDto) {
     const draft = { ...dto, id: randomUUID() };

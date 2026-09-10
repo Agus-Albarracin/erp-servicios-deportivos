@@ -61,6 +61,7 @@ export interface AvailabilitySchedule {
   opensAt: string; closesAt: string; durationMinutes: number; horizonDays: number;
 }
 export interface Tables {
+  reservationPayments: { id: string; totalPaidAt: string };
   reservations: { id: string; slotId: string; confirmedAt: string };
   calendarSettings: { id: string; calendarEnabled: boolean };
   availabilitySchedules: AvailabilitySchedule;

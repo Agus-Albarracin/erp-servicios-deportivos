@@ -51,6 +51,8 @@ export class BookingDraftResponseDto
   implements BookingDraft
 {
   @ApiProperty({ enum: ['PENDING_CONFIRMATION', 'CONFIRMED'] }) status: string;
+  @ApiProperty({ enum: ['PENDING', 'RESERVATION_PAID', 'TOTAL_PAID'], description: 'Registro administrativo de pagos externos. Las confirmaciones existentes se muestran como RESERVATION_PAID; no verifica cobros.' }) paymentStatus: string;
+  @ApiPropertyOptional({ type: String, format: 'date-time', description: 'Instante UTC del primer registro administrativo de pago total; no es la fecha bancaria del pago.' }) totalPaidAt?: string;
   @ApiPropertyOptional({ type: String, format: 'date-time' }) startsAt?: string;
   @ApiPropertyOptional({ type: String, format: 'date-time' }) endsAt?: string;
   @ApiPropertyOptional({ type: String, format: 'date-time' }) confirmedAt?: string;
